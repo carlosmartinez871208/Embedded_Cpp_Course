@@ -1,0 +1,31 @@
+{
+    "version": "0.2.0",
+    "projectName": "${workspaceFolderBasename}",
+    "configurations": [
+        {
+            "request": "launch",
+            "type": "cortex-debug",
+            "name": "Jlink debug",
+            "cwd" : "${workspaceRoot}",
+            "executable": "${workspaceRoot}/build/bin/${workspaceFolderBasename}",
+            "serverpath": "JLinkGDBServerCL",
+            "serverArgs": [],
+            "servertype": "jlink",
+            "device": "STM32F429ZI",
+            "interface": "swd",
+            "runToEntryPoint": "main",
+        },
+        {
+            "request": "launch",
+            "type": "cortex-debug",
+            "name": "ST-link debug",
+            "cwd" : "${workspaceRoot}",
+            "executable": "${workspaceRoot}/build/bin/${workspaceFolderBasename}",
+            "serverArgs": [],
+            "servertype": "stutil",
+            "device": "STM32F429ZI",
+            "interface": "swd",
+            "runToEntryPoint": "main",
+        }
+    ],
+}

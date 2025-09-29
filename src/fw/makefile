@@ -1,0 +1,30 @@
+#Firmware build
+SRC_DIR := src
+OBJ_DIR  = ../../build/obj
+
+SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
+OBJECTS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SOURCES))
+
+INCLUDES =\
+-Iinc\
+-Iinc/stm32f429zi\
+-I../../inc/generic/\
+-I../../inc/autosar/\
+
+# Microcontroller Processor Architecture:
+MACH = cortex-m4
+#Flags
+WARNS = -Wall -Werror -Wpedantic -Wno-unused-variable -Wno-unused-function -Wno-unused-parameter -Wno-missing-field-initializers -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
+CFLAGS = -c -mcpu=$(MACH) -mthumb -std=gnu++20 -g
+# Compiler variables:
+CC = arm-none-eabi-g++
+
+.PHONY: all
+
+all: $(OBJECTS)
+
+$(OBJ_DIR)/%.o:$(SRC_DIR)/%.cpp
+	@echo "Building Firmware...!"
+	$(CC) $(CFLAGS) $(WARNS) $(INCLUDES) $< -o $@
+
+.PHONY: all
