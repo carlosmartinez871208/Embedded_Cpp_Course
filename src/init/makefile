@@ -14,7 +14,7 @@ INCLUDES =\
 -I../../inc/generic/\
 -I../../inc/autosar/\
 -I../fw/inc/\
--I../fw/inc/stm32f429zi/\
+-I../fw/inc/stm32f334r8/\
 
 MAIN_PATH = main
 STUP_PATH = startup
@@ -24,4 +24,4 @@ STUP_PATH = startup
 all:
 	@echo "Building System initilization code...!"
 	$(CC) $(CFLAGS) $(WARNS) $(INCLUDES) $(MAIN_PATH)/main.cpp -o $(OBJECTS)/main.o
-	$(CC) $(CFLAGS) $(WARNS) $(INCLUDES) $(STUP_PATH)/Stm32f429zi_Startup.cpp -o $(OBJECTS)/Stm32f429zi_Startup.o
+	$(CC) $(CFLAGS) $(WARNS) $(INCLUDES) $(STUP_PATH)/Stm32f334r8_Startup.cpp -o $(OBJECTS)/Stm32f334r8_Startup.o

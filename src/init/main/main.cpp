@@ -55,14 +55,14 @@
 /*********************************************************************************************************************/
 int main (void)
 {
-    /* Enable GPIOG peripheral */
+    /* Enable GPIOA peripheral */
     RCC rcc;
-    GPIO portg(GPIOG);
-    rcc.EnableGPIO(RCC_AHB1ENR_GPIOG_EN);
-    portg.InitPinMode(PORTG_PIN13_MODE_OUTPUT);
+    GPIO porta(PORTA);
+    rcc.EnableGPIO(RCC_AHBENR_GPIOA_ENABLE);
+    porta.InitPinMode(PIN5_OUTPUT_MODE);
     while(TRUE)
     {
-        portg.TogglePin(PORTG_PIN13);
+        porta.TogglePin(PIN5);
         for (uint32_t i = 0; i < 1000000; i++);
     }
     return EXIT_SUCCESS;

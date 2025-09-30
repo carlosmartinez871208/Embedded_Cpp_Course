@@ -58,7 +58,7 @@ RCC::RCC(void){
 
 void RCC::EnableGPIO(const uint32_t GPIO_EN)
 {
-    rcc->ahb1enr |= GPIO_EN;
+    rcc->AHBENR |= GPIO_EN;
 }
 
 /***************************************************Project Logs*******************************************************

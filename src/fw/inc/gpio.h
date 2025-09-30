@@ -35,40 +35,61 @@
 /*********************************************************************************************************************/
 typedef struct
 {
-    __IO uint32_t moder;
-    __IO uint32_t otyper;
-    __IO uint32_t ospeedr;
-    __IO uint32_t pupdr;
-    __IO uint32_t idr;
-    __IO uint32_t odr;
-    __IO uint32_t bsrr;
-    __IO uint32_t lckr;
-    __IO uint32_t afrl;
-    __IO uint32_t afrh;
+    __IO uint32_t MODER;    /*!< GPIO port mode register,               Address offset: 0x00      */    
+    __IO uint32_t OTYPER;   /*!< GPIO port output type register,        Address offset: 0x04      */
+    __IO uint32_t OSPEEDR;  /*!< GPIO port output speed register,       Address offset: 0x08      */
+    __IO uint32_t PUPDR;    /*!< GPIO port pull-up/pull-down register,  Address offset: 0x0C      */
+    __IO uint32_t IDR;      /*!< GPIO port input data register,         Address offset: 0x10      */
+    __IO uint32_t ODR;      /*!< GPIO port output data register,        Address offset: 0x14      */
+    __IO uint32_t BSRR;     /*!< GPIO port bit set/reset register,      Address offset: 0x18      */
+    __IO uint32_t LCKR;     /*!< GPIO port configuration lock register, Address offset: 0x1C      */
+    __IO uint32_t AFR[2];  /*!< GPIO alternate function registers,      Address offset: 0x20-0x24 */
+    __IO uint32_t BRR;      /*!< GPIO port bit reset register,          Address offset: 0x28      */
 }GPIO_TypeDef;
 
 /*                                                       Macros                                                      */
 /*********************************************************************************************************************/
-#define GPIOG                           ((GPIO_TypeDef *) GPIOG_BASE_ADDRESS)
+#ifndef GPIOA_TYPE
+#define GPIOA_TYPE ((GPIO_TypeDef*)GPIOA_BASE_ADDRESS)
+#endif
 
-/* Green LED is connected to GPIOG pin 13 */
-/* Pin 13 configuration bits: */
-#define GPIO_MODER_PIN_13_1            ((uint32_t) (1 << 27))
-#define GPIO_MODER_PIN_13_0            ((uint32_t) (1 << 26))
-/* Configure GPIOG pin 13 as output: */
-#define PORTG_PIN13_MODE_OUTPUT        ((uint32_t) (GPIO_MODER_PIN_13_0))
-/* Pin13 output bits: */
-#define GPIO_ODR_PIN_13                ((uint32_t) (1 << 13))
-/* Define PORTG_PIN13  */
-#define PORTG_PIN13                    GPIO_ODR_PIN_13
+#ifndef GPIOB_TYPE
+#define GPIOB_TYPE ((GPIO_TypeDef*)GPIOB_BASE_ADDRESS)
+#endif
+
+#ifndef GPIOC_TYPE
+#define GPIOC_TYPE ((GPIO_TypeDef*)GPIOC_BASE_ADDRESS)
+#endif
+
+#ifndef GPIOD_TYPE
+#define GPIOD_TYPE ((GPIO_TypeDef*)GPIOD_BASE_ADDRESS)
+#endif
+
+#ifndef GPIOF_TYPE
+#define GPIOF_TYPE ((GPIO_TypeDef*)GPIOF_BASE_ADDRESS)
+#endif
+
+#define PORTA                 GPIOA_TYPE
+#define PORTB                 GPIOB_TYPE
+#define PORTC                 GPIOC_TYPE
+#define PORTD                 GPIOD_TYPE
+#define PORTF                 GPIOF_TYPE
+
+#define GPIO_PORTA_MODER_5_1  (1U << 11)
+#define GPIO_PORTA_MODER_5_0  (1U << 10)
+
+#define PIN5_OUTPUT_MODE      (GPIO_PORTA_MODER_5_0)
+
+#define GPIO_PORTA_ODR_5      (1U << 5)
+#define PIN5                  GPIO_PORTA_ODR_5
 
 /*                                                 Exported Constants                                                */
 /*********************************************************************************************************************/
 class GPIO{
     private:
-        GPIO_TypeDef* gpio;
+        GPIO_TypeDef* port;
     public:
-        GPIO(GPIO_TypeDef* gpio): gpio(gpio) {};
+        GPIO(GPIO_TypeDef* port): port(port) {};
         void InitPinMode   (const uint32_t PIN_MODE);
         void TogglePin     (const uint32_t PIN);
 };

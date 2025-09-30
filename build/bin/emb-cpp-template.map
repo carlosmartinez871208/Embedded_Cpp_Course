@@ -1,0 +1,297 @@
+
+Discarded input sections
+
+ .group         0x00000000        0x8 obj/main.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+FLASH            0x08000000         0x00010000         xr
+SRAM             0x20000000         0x00003000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD obj/gpio.o
+LOAD obj/main.o
+LOAD obj/rcc.o
+LOAD obj/Stm32f334r8_Startup.o
+                0x20003000                        _estack = (ORIGIN (SRAM) + LENGTH (SRAM))
+                0x00000200                        __max_heap_size = 0x200
+                0x00000400                        __max_stack_size = 0x400
+
+.isr_vector_table
+                0x08000000      0x188
+                0x08000000                        . = ALIGN (0x80)
+ *(.isr_vector_table)
+ .isr_vector_table
+                0x08000000      0x188 obj/Stm32f334r8_Startup.o
+                0x08000188                        . = ALIGN (0x4)
+
+.text           0x08000188      0x188
+                0x08000188                        . = ALIGN (0x4)
+                0x08000188                        _stext = .
+                0x08000188                        __text_start__ = _stext
+ *(.text.startup .text.startup.*)
+ *(.text .text.*)
+ .text          0x08000188       0x58 obj/gpio.o
+                0x08000188                GPIO::InitPinMode(unsigned long)
+                0x080001bc                GPIO::TogglePin(unsigned long)
+ .text          0x080001e0       0x5c obj/main.o
+                0x080001e0                main
+ .text._ZN4GPIOC2EP12GPIO_TypeDef
+                0x0800023c       0x1c obj/main.o
+                0x0800023c                GPIO::GPIO(GPIO_TypeDef*)
+                0x0800023c                GPIO::GPIO(GPIO_TypeDef*)
+ .text          0x08000258       0x44 obj/rcc.o
+                0x08000258                RCC::RCC()
+                0x08000258                RCC::RCC()
+                0x08000278                RCC::EnableGPIO(unsigned long)
+ .text          0x0800029c       0x74 obj/Stm32f334r8_Startup.o
+                0x0800029c                SystemInit
+                0x080002a8                EXTI2_IRQHandler
+                0x080002a8                SVCall_Handler
+                0x080002a8                TIM1_CC_IRQHandler
+                0x080002a8                Systick_Handler
+                0x080002a8                HardFault_Handler
+                0x080002a8                DMA1_Stream5_IRQHandler
+                0x080002a8                PendSV_Handler
+                0x080002a8                NMI_Handler
+                0x080002a8                EXTI3_IRQHandler
+                0x080002a8                HRTIM_TIMD_IRQHandler
+                0x080002a8                EXTI0_IRQHandler
+                0x080002a8                DMA1_Stream2_IRQHandler
+                0x080002a8                FPU_IRQHandler
+                0x080002a8                CAN_TX_IRQHandler
+                0x080002a8                TIM1_UP_TIM16_IRQHandler
+                0x080002a8                UsageFault_Handler
+                0x080002a8                SPI1_IRQHandler
+                0x080002a8                CAN_SCE_IRQHandler
+                0x080002a8                USART3_IRQHandler
+                0x080002a8                TIM7_DAC2_IRQHandler
+                0x080002a8                CAN_RX1_IRQHandler
+                0x080002a8                I2C1_EV_IRQHandler
+                0x080002a8                DMA1_Stream6_IRQHandler
+                0x080002a8                DMA1_Stream1_IRQHandler
+                0x080002a8                TIM3_IRQHandler
+                0x080002a8                RCC_IRQHandler
+                0x080002a8                Default_Handler
+                0x080002a8                HRTIM_TIMB_IRQHandler
+                0x080002a8                EXTI15_10_IRQHandler
+                0x080002a8                HRTIM_TIMA_IRQHandler
+                0x080002a8                ADC_IRQHandler
+                0x080002a8                COMP2_IRQHandler
+                0x080002a8                DMA1_Stream7_IRQHandler
+                0x080002a8                HRTIM_TIME_IRQHandler
+                0x080002a8                EXTI_PVD_IRQHandler
+                0x080002a8                WWDOG_IRQHandler
+                0x080002a8                TIM6_DAC1_IRQHandler
+                0x080002a8                EXTI9_5_IRQHandler
+                0x080002a8                MemManage_Handler
+                0x080002a8                DMA1_Stream0_IRQHandler
+                0x080002a8                EXTI4_IRQHandler
+                0x080002a8                EXTI_RTC_WKUP_IRQHandler
+                0x080002a8                TIM1_BRK_TIM15_IRQHandler
+                0x080002a8                RTC_Alarm_IRQHandler
+                0x080002a8                HRTIM_TIMC_IRQHandler
+                0x080002a8                TIM1_TRG_COM_TIM17_IRQHandler
+                0x080002a8                TIM2_IRQHandler
+                0x080002a8                HRTIM_Master_IRQHandler
+                0x080002a8                EXTI1_IRQHandler
+                0x080002a8                COMP4_6_IRQHandler
+                0x080002a8                EXTI_TAMP_STAMP_IRQHandler
+                0x080002a8                USART2_IRQHandler
+                0x080002a8                FLASH_IRQHandler
+                0x080002a8                BusFault_Handler
+                0x080002a8                USART1_IRQHandler
+                0x080002a8                CAN_RX0_IRQHandler
+                0x080002a8                DMA1_Stream4_IRQHandler
+                0x080002a8                I2C1_ER_IRQHandler
+                0x080002a8                DebugMonitor_Handler
+                0x080002a8                HRTIM_TIM_FLT_IRQHandler
+                0x080002a8                DMA1_Stream3_IRQHandler
+                0x080002b0                Reset_Handler
+ *(.ramfunc.load)
+ *(.init)
+ *(.fini)
+ *(.gcc_except_table)
+ *(.gnu.linkonce.t.*)
+ *(.rodata .rodata.* .gnu.linkonce.r.*)
+                0x08000310                        . = ALIGN (0x4)
+                0x08000310                        __preinit_array_start = .
+ *(.preinit_array*)
+                0x08000310                        __preinit_array_end = .
+                0x08000310                        . = ALIGN (0x4)
+                0x08000310                        __init_array_start = .
+ *(SORT_BY_NAME(.init_array.*))
+ *(.init_array*)
+                0x08000310                        __init_array_end = .
+                0x08000310                        . = ALIGN (0x4)
+                0x08000310                        __fini_array_start = .
+ *(SORT_BY_NAME(.fini_array.*))
+ *(.fini_array*)
+                0x08000310                        __fini_array_end = .
+                0x08000310                        . = ALIGN (0x4)
+                0x08000310                        __ctors_start__ = .
+ *(.ctors)
+ *(.ctors.*)
+                0x08000310                        __ctors_end__ = .
+                0x08000310                        . = ALIGN (0x4)
+                0x08000310                        __dtors_start__ = .
+ *(.dtors)
+ *(.dtors.*)
+                0x08000310                        __dtors_end__ = .
+                0x08000310                        . = ALIGN (0x4)
+                0x08000310                        __text_end__ = .
+
+.glue_7         0x08000310        0x0
+ .glue_7        0x08000310        0x0 linker stubs
+
+.glue_7t        0x08000310        0x0
+ .glue_7t       0x08000310        0x0 linker stubs
+
+.vfp11_veneer   0x08000310        0x0
+ .vfp11_veneer  0x08000310        0x0 linker stubs
+
+.v4_bx          0x08000310        0x0
+ .v4_bx         0x08000310        0x0 linker stubs
+
+.iplt           0x08000310        0x0
+ .iplt          0x08000310        0x0 obj/main.o
+
+.rel.dyn        0x08000310        0x0
+ .rel.iplt      0x08000310        0x0 obj/main.o
+
+.ARM.extab
+ *(.ARM.extab* .gnu.linkonce.armextab.*)
+
+.ARM.exidx      0x08000310        0x0
+                0x08000310                        __exidx_start = .
+ *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+                0x08000310                        __exidx_end = .
+                0x08000310                        _etext = LOADADDR (.data)
+
+.data           0x20000000        0x0 load address 0x08000310
+                0x20000000                        . = ALIGN (0x4)
+                0x20000000                        _sdata = .
+                0x20000000                        __data_start__ = _sdata
+ *(.data .data.* .gnu.linkonce.d.*)
+ .data          0x20000000        0x0 obj/gpio.o
+ .data          0x20000000        0x0 obj/main.o
+ .data          0x20000000        0x0 obj/rcc.o
+ .data          0x20000000        0x0 obj/Stm32f334r8_Startup.o
+ *(.ramfunc .ramfunc.*)
+                0x20000000                        . = ALIGN (0x4)
+                0x20000000                        _edata = .
+                0x20000000                        __data_end__ = _edata
+
+.igot.plt       0x20000000        0x0 load address 0x08000310
+ .igot.plt      0x20000000        0x0 obj/main.o
+
+.noinit         0x20000000        0x0 load address 0x08000310
+                0x20000000                        . = ALIGN (0x4)
+                0x20000000                        _snoinit = .
+ *(.noinit .noinit.*)
+                0x20000000                        . = ALIGN (0x4)
+                0x20000000                        _enoinit = .
+
+.bss            0x20000000        0x0 load address 0x08000310
+                0x20000000                        . = ALIGN (0x4)
+                0x20000000                        _sbss = .
+                0x20000000                        __bss_start__ = _sbss
+ *(.bss .bss.*)
+ .bss           0x20000000        0x0 obj/gpio.o
+ .bss           0x20000000        0x0 obj/main.o
+ .bss           0x20000000        0x0 obj/rcc.o
+ .bss           0x20000000        0x0 obj/Stm32f334r8_Startup.o
+ *(COMMON)
+                0x20000000                        . = ALIGN (0x4)
+                0x20000000                        _ebss = .
+                0x20000000                        __bss_end__ = _ebss
+                0x20000000                        __end__ = .
+                0x20000000                        end = .
+
+._heap_stack    0x20000000      0x600 load address 0x08000310
+                0x20000000                        . = ALIGN (0x8)
+                0x20000000                        __heap_start__ = .
+                0x20000200                        . = (. + __max_heap_size)
+ *fill*         0x20000000      0x200 
+                0x20000200                        __heap_end__ = .
+                0x20000200                        . = ALIGN (0x8)
+                0x20000200                        __stack_bottom__ = .
+                0x20000600                        . = (. + __max_stack_size)
+ *fill*         0x20000200      0x400 
+                0x20000600                        __stack_top__ = .
+                0x20000600                        _end = .
+                [!provide]                        PROVIDE (end = _end)
+                [!provide]                        PROVIDE (__end__ = _end)
+                [!provide]                        PROVIDE (__HeapBase = __heap_start__)
+                [!provide]                        PROVIDE (__HeapLimit = __heap_end__)
+                [!provide]                        PROVIDE (__StackLimit = __stack_bottom__)
+                [!provide]                        PROVIDE (__StackTop = _estack)
+OUTPUT(bin/emb-cpp-template elf32-littlearm)
+LOAD linker stubs
+
+.debug_info     0x00000000      0x8a9
+ .debug_info    0x00000000      0x202 obj/gpio.o
+ .debug_info    0x00000202      0x380 obj/main.o
+ .debug_info    0x00000582      0x1e7 obj/rcc.o
+ .debug_info    0x00000769      0x140 obj/Stm32f334r8_Startup.o
+
+.debug_abbrev   0x00000000      0x558
+ .debug_abbrev  0x00000000      0x159 obj/gpio.o
+ .debug_abbrev  0x00000159      0x1cb obj/main.o
+ .debug_abbrev  0x00000324      0x140 obj/rcc.o
+ .debug_abbrev  0x00000464       0xf4 obj/Stm32f334r8_Startup.o
+
+.debug_aranges  0x00000000       0x88
+ .debug_aranges
+                0x00000000       0x20 obj/gpio.o
+ .debug_aranges
+                0x00000020       0x28 obj/main.o
+ .debug_aranges
+                0x00000048       0x20 obj/rcc.o
+ .debug_aranges
+                0x00000068       0x20 obj/Stm32f334r8_Startup.o
+
+.debug_line     0x00000000      0x28e
+ .debug_line    0x00000000       0x99 obj/gpio.o
+ .debug_line    0x00000099       0xbe obj/main.o
+ .debug_line    0x00000157       0x82 obj/rcc.o
+ .debug_line    0x000001d9       0xb5 obj/Stm32f334r8_Startup.o
+
+.debug_str      0x00000000      0x36f
+ .debug_str     0x00000000      0x36f obj/gpio.o
+                                0x20c (size before relaxing)
+ .debug_str     0x0000036f      0x2c6 obj/main.o
+ .debug_str     0x0000036f      0x1ee obj/rcc.o
+ .debug_str     0x0000036f      0x1ce obj/Stm32f334r8_Startup.o
+
+.comment        0x00000000       0x45
+ .comment       0x00000000       0x45 obj/gpio.o
+                                 0x46 (size before relaxing)
+ .comment       0x00000045       0x46 obj/main.o
+ .comment       0x00000045       0x46 obj/rcc.o
+ .comment       0x00000045       0x46 obj/Stm32f334r8_Startup.o
+
+.ARM.attributes
+                0x00000000       0x2e
+ .ARM.attributes
+                0x00000000       0x2e obj/gpio.o
+ .ARM.attributes
+                0x0000002e       0x2e obj/main.o
+ .ARM.attributes
+                0x0000005c       0x2e obj/rcc.o
+ .ARM.attributes
+                0x0000008a       0x2e obj/Stm32f334r8_Startup.o
+
+.debug_frame    0x00000000      0x180
+ .debug_frame   0x00000000       0x60 obj/gpio.o
+ .debug_frame   0x00000060       0x58 obj/main.o
+ .debug_frame   0x000000b8       0x60 obj/rcc.o
+ .debug_frame   0x00000118       0x68 obj/Stm32f334r8_Startup.o
+
+.debug_rnglists
+                0x00000000       0x19
+ .debug_rnglists
+                0x00000000       0x19 obj/main.o

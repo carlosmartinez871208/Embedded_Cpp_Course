@@ -7,7 +7,7 @@ OBJECTS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SOURCES))
 
 INCLUDES =\
 -Iinc\
--Iinc/stm32f429zi\
+-Iinc/stm32f334r8\
 -I../../inc/generic/\
 -I../../inc/autosar/\
 

@@ -55,14 +55,14 @@
 void GPIO::InitPinMode   (const uint32_t PIN_MODE)
 {
     /* Clear pin mode bits */
-    gpio->moder &= ~(GPIO_MODER_PIN_13_1 | GPIO_MODER_PIN_13_0);
+    port->MODER &= ~(GPIO_PORTA_MODER_5_1 | GPIO_PORTA_MODER_5_0);
     /* Set pin mode */
-    gpio->moder |= PIN_MODE;
+    port->MODER |= PIN_MODE;
 }
 
 void GPIO::TogglePin (const uint32_t PIN)
 {
-    gpio->odr ^= PIN;
+    port->ODR ^= PIN;
 }
 
 /***************************************************Project Logs*******************************************************

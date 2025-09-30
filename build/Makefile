@@ -25,10 +25,10 @@ OBJ_PATH = obj
 LOG_PATH = report
 
 # Microcontroller name
-DEVICE = STM32F429ZI
+DEVICE = stm32f334R8
 
 # Linker script file.
-LINKER_SCRIP = ../src/init/linker/Stm32f429zi_Ls.ld
+LINKER_SCRIP = ../src/init/linker/Stm32f334r8_Ls.ld
 
 # Target name:
 TARGET = $(BIN_PATH)/$(PROJECT)
@@ -75,7 +75,7 @@ all: clean
 	@mkdir -p $(BIN_PATH)
 	@mkdir -p $(LOG_PATH)
 	@mkdir -p $(OBJ_PATH)
-	@d=$$(gdate +%s); $(MAKE) "build" $(LOG_CMD) && echo "Building time: $$(gdate --utc --date=@$$(($$(gdate +%s)-d)) '+%H:%M:%S')" $(LOG_CMD)
+	@d=$$(date +%s); $(MAKE) "build" $(LOG_CMD) && echo "Building time: $$(date --utc --date=@$$(($$(date +%s)-d)) '+%H:%M:%S')" $(LOG_CMD)
 
 asw:
 	@echo ''
@@ -115,7 +115,7 @@ post_build:
 
 pre_build:
 	@echo $(PROJECT)
-	@echo "Build date: "$(shell gdate '+%Y-%m-%d %H:%M:%S')
+	@echo "Build date: "$(shell date '+%Y-%m-%d %H:%M:%S')
 	@echo ''
 	@echo "Building started...!"
 
@@ -129,22 +129,27 @@ stats:
 	@echo ''
 
 ################################### Flashing and debugging section #######################################
-$(BIN_PATH)/jflash: $(TARGET).bin
-	@touch $@
-	@echo Device $(DEVICE) > $@
-	@echo si 1'\n'Speed 4000 >> $@
-	@echo loadbin $< 0x08000000 >> $@
-	@echo r'\n'g'\n'qc >> $@
+#$(BIN_PATH)/jflash: $(TARGET).bin
+#	@touch $@
+#	@echo Device $(DEVICE) > $@
+#	@echo si 1'\n'Speed 4000 >> $@
+#	@echo loadbin $< 0x08000000 >> $@
+#	@echo r'\n'g'\n'qc >> $@
 
-flash: $(BIN_PATH)/jflash
+#flash: $(BIN_PATH)/jflash
+#	@echo "Flashing started ...!"
+#	JLinkExe -commanderscript $<
+
+########################################## Flashing with ST-Link #########################################
+flash:
 	@echo "Flashing started ...!"
-	JLinkExe -commanderscript $<
+	@st-flash.exe --reset write $(TARGET).bin 0x08000000
 
 # Use this if you are using JLink: make -j2 debug
-debug: server client
+#debug: server client
 
-client:
-	$(GDB) -ex 'target remote: 2331' $(TARGET) 
+#client:
+#	$(GDB) -ex 'target remote: 2331' $(TARGET) 
 
-server:
-	$(DB) -select USB -device $(DEVICE) -endian-little -if SWD -speed 4000
+#server:
+#	$(DB) -select USB -device $(DEVICE) -endian-little -if SWD -speed 4000
