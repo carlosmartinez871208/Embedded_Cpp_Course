@@ -38,12 +38,12 @@
 #endif
 
 #ifndef AHB3_BASE_ADDRESS
- #define AHB3_OFFSET            (0x0ul)
+ #define AHB3_OFFSET            (0x10000000ul)
  #define AHB3_BASE_ADDRESS      (FMC_BASE_ADDRESS + AHB3_OFFSET)
 #endif
 
 #ifndef AHB2_BASE_ADDRESS
- #define AHB2_OFFSET            (0x10000000ul)
+ #define AHB2_OFFSET            (0x8000000ul)
  #define AHB2_BASE_ADDRESS      (PERIPHERAL_BASE_ADDRESS + AHB2_OFFSET)
 #endif
 

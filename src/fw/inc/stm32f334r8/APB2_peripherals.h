@@ -32,19 +32,44 @@
 
 /*                                                      Constants                                                    */
 /*********************************************************************************************************************/
+#ifndef SYS_COMP_OPAMP_BASE_ADDRESS
+ #define SYS_COMP_OPAMP_OFFSET    (0x0ul)
+ #define SYS_COMP_OPAMP_BASE_ADDRESS (APB2_BASE_ADDRESS + SYS_COMP_OPAMP_OFFSET)
+#endif
+
+#ifndef EXTI_BASE_ADDRESS
+ #define EXTI_OFFSET              (0x400ul)
+ #define EXTI_BASE_ADDRESS        (APB2_BASE_ADDRESS + EXTI_OFFSET)
+#endif
+
 #ifndef TIM1_BASE_ADDRESS
- #define TIM1_OFFSET              (0x0ul)
+ #define TIM1_OFFSET              (0x2C00ul)
  #define TIM1_BASE_ADDRESS        (APB2_BASE_ADDRESS + TIM1_OFFSET)
 #endif
 
-#ifndef TIM8_BASE_ADDRESS
- #define TIM8_OFFSET              (0x400ul)
- #define TIM8_BASE_ADDRESS        (APB2_BASE_ADDRESS + TIM8_OFFSET)
+#ifndef SPI1_BASE_ADDRESS
+ #define SPI1_OFFSET              (0x3000ul)
+ #define SPI1_BASE_ADDRESS        (APB2_BASE_ADDRESS + SPI1_OFFSET)
 #endif
 
 #ifndef USART1_BASE_ADDRESS
- #define USART1_OFFSET            (0x1000ul)
+ #define USART1_OFFSET            (0x3800ul)
  #define USART1_BASE_ADDRESS      (APB2_BASE_ADDRESS + USART1_OFFSET)
+#endif
+
+#ifndef TIM15_BASE_ADDRESS
+ #define TIM15_OFFSET              (0x4000ul)
+ #define TIM15_BASE_ADDRESS        (APB2_BASE_ADDRESS + TIM15_OFFSET)
+#endif
+
+#ifndef TIM16_BASE_ADDRESS
+ #define TIM16_OFFSET              (0x4400ul)
+ #define TIM16_BASE_ADDRESS        (APB2_BASE_ADDRESS + TIM16_OFFSET)
+#endif
+
+#ifndef TIM17_BASE_ADDRESS
+ #define TIM17_OFFSET              (0x4800ul)
+ #define TIM17_BASE_ADDRESS        (APB2_BASE_ADDRESS + TIM17_OFFSET)
 #endif
 
 #ifndef USART6_BASE_ADDRESS
@@ -62,11 +87,6 @@
  #define SDO_BASE_ADDRESS         (APB2_BASE_ADDRESS + SDO_OFFSET)
 #endif
 
-#ifndef SPI1_BASE_ADDRESS
- #define SPI1_OFFSET              (0x3000ul)
- #define SPI1_BASE_ADDRESS        (APB2_BASE_ADDRESS + SPI1_OFFSET)
-#endif
-
 #ifndef SPI4_BASE_ADDRESS
  #define SPI4_OFFSET              (0x3400ul)
  #define SPI4_BASE_ADDRESS        (APB2_BASE_ADDRESS + SPI4_OFFSET)
@@ -75,11 +95,6 @@
 #ifndef SYSCFG_BASE_ADDRESS
  #define SYSCFG_OFFSET            (0x3800ul)
  #define SYSCFG_BASE_ADDRESS      (APB2_BASE_ADDRESS + SYSCFG_OFFSET)
-#endif
-
-#ifndef EXTI_BASE_ADDRESS
- #define EXTI_OFFSET              (0x3C00ul)
- #define EXTI_BASE_ADDRESS        (APB2_BASE_ADDRESS + EXTI_OFFSET)
 #endif
 
 #ifndef TIM9_BASE_ADDRESS
@@ -97,24 +112,9 @@
  #define TIM11_BASE_ADDRESS        (APB2_BASE_ADDRESS + TIM11_OFFSET)
 #endif
 
-#ifndef SPI5_BASE_ADDRESS
- #define SPI5_OFFSET              (0x5000ul)
- #define SPI5_BASE_ADDRESS        (APB2_BASE_ADDRESS + SPI5_OFFSET)
-#endif
-
-#ifndef SPI6_BASE_ADDRESS
- #define SPI6_OFFSET              (0x5400ul)
- #define SPI6_BASE_ADDRESS        (APB2_BASE_ADDRESS + SPI6_OFFSET)
-#endif
-
-#ifndef SAI1_BASE_ADDRESS
- #define SAI1_OFFSET              (0x5800ul)
- #define SAI1_BASE_ADDRESS        (APB2_BASE_ADDRESS + SAI1_OFFSET)
-#endif
-
-#ifndef LCD_TFT_BASE_ADDRESS
- #define LCD_TFT_OFFSET           (0x6800ul)
- #define LCD_TFT_BASE_ADDRESS     (APB2_BASE_ADDRESS + LCD_TFT_OFFSET)
+#ifndef HRTIM1_BASE_ADDRESS
+ #define HRTIM1_OFFSET            (0x7400ul)
+ #define HRTIM1_BASE_ADDRESS      (APB2_BASE_ADDRESS + HRTIM1_OFFSET)
 #endif
 
 /*                                                 Exported Variables                                                */

@@ -32,40 +32,11 @@
 
 /*                                                      Constants                                                    */
 /*********************************************************************************************************************/
-#ifndef FMC_BANK1_BASE_ADDRESS
- #define FMC_BANK1_OFFSET       (0x0ul)
- #define FMC_BANK1_BASE_ADDRESS (AHB3_BASE_ADDRESS + FMC_BANK1_OFFSET)
+#ifndef ADC1_ADC2_BASE_ADDRESS
+ #define ADC1_ADC2_OFFSET       (0x0ul)
+ #define ADC1_ADC2_BASE_ADDRESS (AHB3_BASE_ADDRESS + ADC1_ADC2_OFFSET)
 #endif
 
-#ifndef FMC_BANK2_BASE_ADDRESS
- #define FMC_BANK2_OFFSET       (0x10000000ul)
- #define FMC_BANK2_BASE_ADDRESS (AHB3_BASE_ADDRESS + FMC_BANK2_OFFSET)
-#endif
-
-#ifndef FMC_BANK3_BASE_ADDRESS
- #define FMC_BANK3_OFFSET       (0x20000000ul)
- #define FMC_BANK3_BASE_ADDRESS (AHB3_BASE_ADDRESS + FMC_BANK3_OFFSET)
-#endif
-
-#ifndef FMC_BANK4_BASE_ADDRESS
- #define FMC_BANK4_OFFSET       (0x30000000ul)
- #define FMC_BANK4_BASE_ADDRESS (AHB3_BASE_ADDRESS + FMC_BANK4_OFFSET)
-#endif
-
-#ifndef FMC_CR_BASE_ADDRESS
- #define FMC_CR_OFFSET          (0x40000000ul)
- #define FMC_CR_BASE_ADDRESS    (AHB3_BASE_ADDRESS + FMC_CR_OFFSET)
-#endif
-
-#ifndef FMC_BANK5_BASE_ADDRESS
- #define FMC_BANK5_OFFSET       (0x60000000ul)
- #define FMC_BANK5_BASE_ADDRESS (AHB3_BASE_ADDRESS + FMC_BANK5_OFFSET)
-#endif
-
-#ifndef FMC_BANK6_BASE_ADDRESS
- #define FMC_BANK6_OFFSET       (0x70000000ul)
- #define FMC_BANK6_BASE_ADDRESS (AHB3_BASE_ADDRESS + FMC_BANK6_OFFSET)
-#endif
 
 /*                                                 Exported Variables                                                */
 /*********************************************************************************************************************/
