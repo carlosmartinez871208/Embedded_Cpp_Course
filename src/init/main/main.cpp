@@ -28,7 +28,6 @@
 /*                                                   User libraries                                                  */
 /*********************************************************************************************************************/
 #include "main.h"
-#include "fw.h"
 
 /*                                                        Types                                                      */
 /*********************************************************************************************************************/
@@ -55,15 +54,16 @@
 /*********************************************************************************************************************/
 int main (void)
 {
-    /* Enable GPIOA peripheral */
-    RCC rcc;
-    GPIO porta(PORTA);
-    rcc.EnableGPIO(RCC_AHBENR_GPIOA_ENABLE);
-    porta.InitPinMode(PIN5_OUTPUT_MODE);
+    Pin_ConfigType pinList[] = {GREEN_LED, PUSH_BUTTON};
+    Port_ConfigType portCfg{.PinConfigList = pinList,.NumberOfPins = 2};
+    Port BSP(&portCfg);
     while(TRUE)
     {
-        porta.TogglePin(PIN5);
-        for (uint32_t i = 0; i < 1000000; i++);
+        if(BSP.GetPinState(&PUSH_BUTTON)){
+            BSP.SetPinState(&GREEN_LED, STD_HIGH);
+        }else{
+            BSP.SetPinState(&GREEN_LED, STD_LOW);
+        }
     }
     return EXIT_SUCCESS;
 }

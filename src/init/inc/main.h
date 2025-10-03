@@ -28,6 +28,8 @@
 
 /*                                                   User libraries                                                  */
 /*********************************************************************************************************************/
+#include "fw.h"
+#include "gpio.h"
 #include "Std_Types.h"
 
 /*                                                        Types                                                      */
@@ -35,7 +37,25 @@
 
 /*                                                       Macros                                                      */
 /*********************************************************************************************************************/
+inline constexpr Pin_ConfigType GREEN_LED = {
+    PORTA,   // Port
+    PIN5,    // Pin
+    OUTPUT,  // Mode
+    PUSH_PULL, // OutputType
+    LOW_SPEED, // OutputSpeed
+    NO_PULL,   // PullUpDown
+    AF0        // Alternate
+};
 
+inline constexpr Pin_ConfigType PUSH_BUTTON = {
+    PORTC,    // Port
+    PIN13,    // Pin
+    INPUT,    // Mode
+    PUSH_PULL,// OutputType (no afecta en input)
+    LOW_SPEED,// OutputSpeed
+    NO_PULL,  // PullUpDown
+    AF0       // Alternate
+};
 /*                                                 Exported Constants                                                */
 /*********************************************************************************************************************/
 
