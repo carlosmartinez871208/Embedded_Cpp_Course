@@ -182,7 +182,7 @@ typedef struct
 
 /*                                                 Exported Constants                                                */
 /*********************************************************************************************************************/
-static GPIO_TypeDef* const GPIO_Base[9] = {
+static GPIO_TypeDef* const GPIO_Base[5] = {
     (GPIO_TypeDef *) GPIOA_BASE_ADDRESS,
     (GPIO_TypeDef *) GPIOB_BASE_ADDRESS,
     (GPIO_TypeDef *) GPIOC_BASE_ADDRESS,
@@ -190,16 +190,12 @@ static GPIO_TypeDef* const GPIO_Base[9] = {
     (GPIO_TypeDef *) GPIOF_BASE_ADDRESS
 };
 
-static const uint32_t RCC_GPIO_Clk_Enable[9] = {
-    0x00000001ul, /* ... 00000001*/
-    0x00000002ul, /* ... 00000010*/
-    0x00000004ul,
-    0x00000008ul,
-    0x00000010ul,
-    0x00000020ul,
-    0x00000040ul,
-    0x00000080ul,
-    0x00000100ul,
+static const uint32_t RCC_GPIO_Clk_Enable[5] = {
+    0x00020000ul, /* ... 00000001*/
+    0x00040000ul, /* ... 00000010*/
+    0x00080000ul,
+    0x00100000ul,
+    0x00400000ul,
 };
 
 static const uint32_t GPIO_1Bit_control[16][2] = {

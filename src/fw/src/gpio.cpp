@@ -55,12 +55,11 @@
 /*********************************************************************************************************************/
 Port::Port(const Port_ConfigType* ConfigPtr){
     PortConfigPtr = ConfigPtr;
-    const Pin_ConfigType* PinConfig = PortConfigPtr->PinConfigList;
-    /* Enable GPIOx peripheral */
-    GPIO_TypeDef* GPIOx = GPIO_Base[PinConfig->Port];
-    uint16_t i;
-    uint8_t pin = PinConfig->Pin;
-    for(i=0; i<PortConfigPtr->NumberOfPins; i++){
+    for(uint8_t i=0; i<PortConfigPtr->NumberOfPins; i++){
+        const Pin_ConfigType* PinConfig = PortConfigPtr->PinConfigList + i;
+        /* Enable GPIOx peripheral */
+        GPIO_TypeDef* GPIOx = GPIO_Base[PinConfig->Port];
+        uint8_t pin = PinConfig->Pin;
         /* Check if GPIO clock is enabled: */
         if(!(RCC->AHBENR & RCC_GPIO_Clk_Enable[PinConfig->Port])) {
             /* GPIO clock is disabled, enable it: */
