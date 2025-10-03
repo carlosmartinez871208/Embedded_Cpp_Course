@@ -37,7 +37,7 @@
 
 /*                                                       Macros                                                      */
 /*********************************************************************************************************************/
-inline constexpr Pin_ConfigType GREEN_LED = {
+inline constexpr Pin_ConfigType PA5 = {
     PORTA,   // Port
     PIN5,    // Pin
     OUTPUT,  // Mode
@@ -47,7 +47,7 @@ inline constexpr Pin_ConfigType GREEN_LED = {
     AF0        // Alternate
 };
 
-inline constexpr Pin_ConfigType PUSH_BUTTON = {
+inline constexpr Pin_ConfigType PC13 = {
     PORTC,    // Port
     PIN13,    // Pin
     INPUT,    // Mode
@@ -56,6 +56,9 @@ inline constexpr Pin_ConfigType PUSH_BUTTON = {
     NO_PULL,  // PullUpDown
     AF0       // Alternate
 };
+
+#define GREEN_LED     (uint8_t)0u
+#define PUSH_BUTTON   (uint8_t)1u
 /*                                                 Exported Constants                                                */
 /*********************************************************************************************************************/
 

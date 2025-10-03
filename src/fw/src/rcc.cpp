@@ -27,7 +27,6 @@
 
 /*                                                   User libraries                                                  */
 /*********************************************************************************************************************/
-#include "gpio.h"
 #include "rcc.h"
 
 /*                                                        Types                                                      */
@@ -53,105 +52,18 @@
 
 /*                                         Imported functions implementation                                         */
 /*********************************************************************************************************************/
-void GPIO::SetPinMode        (const uint8_t Pin, const uint8_t Mode){
-    this->gpio->MODER  = REG_MASKING(this->gpio->MODER,   GPIO_2Bit_control[Pin][0]); /* Clear mode bits */
-    if(INPUT!=Mode) /* If not input mode */{
-        this->gpio->MODER  = REG_ENABLE_BITS(this->gpio->MODER, GPIO_2Bit_control[Pin][Mode]); /* Set mode bits */
-    }else{/* Input mode, do nothing */}
-}
-
-void GPIO::SetPinOutputType  (const uint8_t Pin, const uint8_t OutputType){
-    this->gpio->OTYPER = REG_MASKING(this->gpio->OTYPER, GPIO_1Bit_control[Pin][0]); /* Clear output type bit */
-    if(PUSH_PULL!=OutputType) /* If not push-pull */{
-        this->gpio->OTYPER = REG_ENABLE_BITS(this->gpio->OTYPER, GPIO_1Bit_control[Pin][1]); /* Set output type bit */
-    }else{/* Push-pull, do nothing */}
-}
-
-void GPIO::SetPinOutputSpeed (const uint8_t Pin, const uint8_t OutputSpeed){
-    this->gpio->OSPEEDR = REG_MASKING(this->gpio->OSPEEDR, GPIO_2Bit_control[Pin][0]); /* Clear speed bits */
-    if(LOW_SPEED!=OutputSpeed) /* If not low speed */{
-        this->gpio->OSPEEDR = REG_ENABLE_BITS(this->gpio->OSPEEDR, GPIO_2Bit_control[Pin][OutputSpeed]); /* Set speed bits */
-    }else{/* Low speed, do nothing */}
-}
-
-void GPIO::SetPinPullUpDown  (const uint8_t Pin, const uint8_t PullUpDown){
-    this->gpio->PUPDR = REG_MASKING(this->gpio->PUPDR, GPIO_2Bit_control[Pin][0]); /* Clear pull-up/pull-down bits */
-    if(NO_PULL!=PullUpDown) /* If not pull-up */{
-        this->gpio->PUPDR = REG_ENABLE_BITS(this->gpio->PUPDR, GPIO_2Bit_control[Pin][PullUpDown]); /* Set pull-up/pull-down bits */
-    }else{/* No pull-up/pull-down, do nothing */}
-}
-void GPIO::SetPinAlternate   (const uint8_t Pin, const uint8_t Alternate){
-    if(Pin < 8){
-        /* GPIOx->AFR[0] */
-        this->gpio->AFR[0] = REG_MASKING(this->gpio->AFR[0], GPIO_4Bit_control[Pin][0]); /* Clear alternate function bits */
-        if(AF0!=Alternate){
-            this->gpio->AFR[0] = REG_ENABLE_BITS(this->gpio->AFR[0], GPIO_4Bit_control[Pin][Alternate]); /* Set alternate function bits */
-        }else{/* AF0, do nothing */}
-    }else{
-        /* GPIOx->AFR[1] */
-        this->gpio->AFR[1] = REG_MASKING(this->gpio->AFR[1], GPIO_4Bit_control[Pin][0]); /* Clear alternate function bits */
-        if(AF0!=Alternate){
-            this->gpio->AFR[1] = REG_ENABLE_BITS(this->gpio->AFR[1], GPIO_4Bit_control[Pin][Alternate]); /* Set alternate function bits */
-        }else{/* AF0, do nothing */}
-    }
-}
-
-Port::Port(const Port_ConfigType* ConfigPtr){
-    PortConfigPtr = ConfigPtr;
-    RCC rcc;
-    for(uint8_t i=0; i<PortConfigPtr->NumberOfPins; i++){
-        const Pin_ConfigType* PinConfig = PortConfigPtr->PinConfigList + i;
-        /* Enable GPIOx peripheral */
-        GPIO GPIOx(GPIO_Base[PinConfig->Port]); // Create GPIO object
-        uint8_t pin = PinConfig->Pin;
-        /* Check if GPIO clock is enabled: */
-        if(!rcc.GetPortClockState(PinConfig->Port)) {
-            /* GPIO clock is disabled, enable it: */
-            rcc.SetPortClockState(PinConfig->Port,STD_ON);
-        }else{/* GPIO clock is enabled, do nothing */}
-        /* Configure Pin Mode: */
-        GPIOx.SetPinMode(pin, PinConfig->Mode);
-        /* Configure Output Type: */
-        if(OUTPUT==PinConfig->Mode || ALTERNATE==PinConfig->Mode){
-            GPIOx.SetPinOutputType(pin, PinConfig->OutputType);
-            /* Configure Speed: */
-            GPIOx.SetPinOutputSpeed(pin, PinConfig->OutputSpeed);
-            /* Configure Pull-up/Pull-down: */
-            GPIOx.SetPinPullUpDown(pin, PinConfig->PullUpDown);
-            /* Configure Alternate Function: */
-            if(ALTERNATE==PinConfig->Mode){
-                GPIOx.SetPinAlternate(pin, PinConfig->Alternate);
-           }else{/* Not alternate function mode, do nothing */}
-        }else{/* Not output or alternate mode, do nothing */}
-    }
-}
-
-void Port::TooglePin        (const uint8_t Pin){
-    uint8_t PinIdx = this->PortConfigPtr->PinConfigList[Pin].Pin;
-    uint8_t PortIdx = this->PortConfigPtr->PinConfigList[Pin].Port;
-    GPIO_TypeDef* GPIOx = GPIO_Base[PortIdx];
-    /* Toggle the output data register */
-    GPIOx->ODR ^= GPIO_1Bit_control[PinIdx][1];
-}
-
-void Port::SetPinState      (const uint8_t Pin, uint8_t State){
-    uint8_t PinIdx = this->PortConfigPtr->PinConfigList[Pin].Pin;
-    uint8_t PortIdx = this->PortConfigPtr->PinConfigList[Pin].Port;
-    GPIO_TypeDef* GPIOx = GPIO_Base[PortIdx];
+void RCC::SetPortClockState(const uint8_t Port, const uint8_t State){
     if(State){
-        GPIOx->ODR |= GPIO_1Bit_control[PinIdx][1]; // Set bit
-    }
-    else{
-        GPIOx->ODR &= ~GPIO_1Bit_control[PinIdx][1]; // Reset bit
+        this->rcc->AHBENR |= RCC_GPIO_Clk_Enable[Port];
+    }else{
+        this->rcc->AHBENR &= ~RCC_GPIO_Clk_Enable[Port];
     }
 }
 
-boolean Port::GetPinState   (const uint8_t Pin){
-    uint8_t PinIdx = this->PortConfigPtr->PinConfigList[Pin].Pin;
-    uint8_t PortIdx = this->PortConfigPtr->PinConfigList[Pin].Port;
-    GPIO_TypeDef* GPIOx = GPIO_Base[PortIdx];
-    return REG_COMPARER(GPIOx->IDR & GPIO_1Bit_control[PinIdx][1]);
+boolean RCC::GetPortClockState(const uint8_t Port){
+    return REG_COMPARER(this->rcc->AHBENR & RCC_GPIO_Clk_Enable[Port]);
 }
+
 /***************************************************Project Logs*******************************************************
  *|    ID   |     Ticket    |     Date    |                               Description                                 |
  *|---------|---------------|-------------|---------------------------------------------------------------------------|

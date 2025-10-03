@@ -54,15 +54,15 @@
 /*********************************************************************************************************************/
 int main (void)
 {
-    Pin_ConfigType pinList[] = {GREEN_LED, PUSH_BUTTON};
+    Pin_ConfigType pinList[] = {PA5,PC13};
     Port_ConfigType portCfg{pinList,2};
     Port BSP(&portCfg);
     while(TRUE)
     {
-        if(BSP.GetPinState(&PUSH_BUTTON)){
-            BSP.SetPinState(&GREEN_LED, STD_HIGH);
+        if(BSP.GetPinState(PUSH_BUTTON)){
+            BSP.SetPinState(GREEN_LED, STD_HIGH);
         }else{
-            BSP.SetPinState(&GREEN_LED, STD_LOW);
+            BSP.SetPinState(GREEN_LED, STD_LOW);
         }
     }
     return EXIT_SUCCESS;

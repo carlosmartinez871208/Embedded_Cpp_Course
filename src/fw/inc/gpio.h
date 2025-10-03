@@ -190,14 +190,6 @@ static GPIO_TypeDef* const GPIO_Base[5] = {
     (GPIO_TypeDef *) GPIOF_BASE_ADDRESS
 };
 
-static const uint32_t RCC_GPIO_Clk_Enable[5] = {
-    0x00020000ul, /* 0000 0000 0000 0010 0000 0000 0000 0000 */
-    0x00040000ul, /* 0000 0000 0000 0100 0000 0000 0000 0000 */
-    0x00080000ul, /* 0000 0000 0000 1000 0000 0000 0000 0000 */
-    0x00100000ul, /* 0000 0000 0001 0000 0000 0000 0000 0000 */
-    0x00400000ul, /* 0000 0000 0100 0000 0000 0000 0000 0000 */
-};
-
 static const uint32_t GPIO_1Bit_control[16][2] = {
     {0xFFFFFFFEul,0x00000001ul}, /* .... 1111 1110*/
     {0xFFFFFFFDul,0x00000002ul}, /* .... 1111 1101*/
@@ -254,15 +246,26 @@ static const uint32_t GPIO_4Bit_control[8][16] = {
 
 /*                                              Exported Class prototypes                                            */
 /*********************************************************************************************************************/
-class Port
-{
+class GPIO{
+    private:
+        GPIO_TypeDef* gpio;
+    public:
+        GPIO(GPIO_TypeDef* Port):gpio(Port){};
+        void    SetPinMode        (const uint8_t Pin, const uint8_t Mode);
+        void    SetPinOutputType  (const uint8_t Pin, const uint8_t OutputType);
+        void    SetPinOutputSpeed (const uint8_t Pin, const uint8_t OutputSpeed);
+        void    SetPinPullUpDown  (const uint8_t Pin, const uint8_t PullUpDown);
+        void    SetPinAlternate   (const uint8_t Pin, const uint8_t Alternate);
+};
+
+class Port{
     private:
         const Port_ConfigType* PortConfigPtr;
     public:
         Port(const Port_ConfigType* ConfigPtr);
-        void    TooglePin        (const Pin_ConfigType*  PinConfig);
-        void    SetPinState      (const Pin_ConfigType*  PinConfig,uint8_t State);
-        boolean GetPinState      (const Pin_ConfigType*  PinConfig);
+        void    TooglePin        (const uint8_t Pin);
+        void    SetPinState      (const uint8_t Pin, uint8_t State);
+        boolean GetPinState      (const uint8_t Pin);
 };
 
 /*********************************************************************************************************************/
