@@ -55,7 +55,7 @@
 int main (void)
 {
     Pin_ConfigType pinList[] = {GREEN_LED, PUSH_BUTTON};
-    Port_ConfigType portCfg{.PinConfigList = pinList,.NumberOfPins = 2};
+    Port_ConfigType portCfg{pinList,2};
     Port BSP(&portCfg);
     while(TRUE)
     {

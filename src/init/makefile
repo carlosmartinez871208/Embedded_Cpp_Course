@@ -3,7 +3,7 @@
 MACH = cortex-m4
 #Flags
 WARNS = -Wall -Werror -Wpedantic -Wno-unused-variable -Wno-unused-function -Wno-unused-parameter -Wno-missing-field-initializers -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-CFLAGS = -c -mcpu=$(MACH) -mthumb -std=gnu++20 -g
+CFLAGS = -c -mcpu=$(MACH) -mthumb -std=gnu++17 -g
 # Compiler variables:
 CC = arm-none-eabi-g++
 
