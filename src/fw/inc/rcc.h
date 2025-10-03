@@ -28,8 +28,9 @@
 
 /*                                                   User libraries                                                  */
 /*********************************************************************************************************************/
-#include "Data_Types.h"
+#include "Std_Types.h"
 #include "peripherals.h"
+#include "Register.h"
 
 /*                                                        Types                                                      */
 /*********************************************************************************************************************/
@@ -75,7 +76,17 @@ typedef struct
 
 /*                                                       Macros                                                      */
 /*********************************************************************************************************************/
-#define RCC_AHB1ENR_GPIOG_EN            ((uint32_t) (1 << 6))
+static const uint32_t RCC_GPIO_Clk_Enable[9] = {
+    0x00000001ul, /* ... 00000001*/
+    0x00000002ul, /* ... 00000010*/
+    0x00000004ul,
+    0x00000008ul,
+    0x00000010ul,
+    0x00000020ul,
+    0x00000040ul,
+    0x00000080ul,
+    0x00000100ul,
+};
 
 /*                                                       Class                                                       */
 /*********************************************************************************************************************/
@@ -84,8 +95,9 @@ class RCC
     private:
         RCC_TypeDef* rcc;
     public:
-        RCC(void);
-        void EnableGPIO(const uint32_t GPIO_EN);
+        RCC(void){rcc = (RCC_TypeDef *) RCC_BASE_ADDRESS;}
+        void    SetPortClockState (const uint8_t Port, const uint8_t State);
+        boolean GetPortClockState(const uint8_t Port);
 };
 
 /*                                                 Exported Constants                                                */

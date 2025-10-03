@@ -28,6 +28,8 @@
 
 /*                                                   User libraries                                                  */
 /*********************************************************************************************************************/
+#include "fw.h"
+#include "gpio.h"
 #include "Std_Types.h"
 
 /*                                                        Types                                                      */
@@ -35,6 +37,39 @@
 
 /*                                                       Macros                                                      */
 /*********************************************************************************************************************/
+inline constexpr Pin_ConfigType PG13 = {
+    PORTG,   // Port
+    PIN13,    // Pin
+    OUTPUT,  // Mode
+    PUSH_PULL, // OutputType
+    LOW_SPEED, // OutputSpeed
+    NO_PULL,   // PullUpDown
+    AF0        // Alternate
+};
+
+inline constexpr Pin_ConfigType PG14 = {
+    PORTG,   // Port
+    PIN14,    // Pin
+    OUTPUT,  // Mode
+    PUSH_PULL, // OutputType
+    LOW_SPEED, // OutputSpeed
+    NO_PULL,   // PullUpDown
+    AF0        // Alternate
+};
+
+inline constexpr Pin_ConfigType PA0 = {
+    PORTA,    // Port
+    PIN0,    // Pin
+    INPUT,    // Mode
+    PUSH_PULL,// OutputType (no afecta en input)
+    LOW_SPEED,// OutputSpeed
+    NO_PULL,  // PullUpDown
+    AF0       // Alternate
+};
+
+#define GREEN_LED   (uint8_t)0u
+#define RED_LED     (uint8_t)1u
+#define PUSH_BUTTON (uint8_t)2u
 
 /*                                                 Exported Constants                                                */
 /*********************************************************************************************************************/

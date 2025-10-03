@@ -55,15 +55,18 @@
 /*********************************************************************************************************************/
 int main (void)
 {
-    /* Enable GPIOG peripheral */
-    RCC rcc;
-    GPIO portg(GPIOG);
-    rcc.EnableGPIO(RCC_AHB1ENR_GPIOG_EN);
-    portg.InitPinMode(PORTG_PIN13_MODE_OUTPUT);
+    Pin_ConfigType pinList[] = {PG13,PG14,PA0};
+    Port_ConfigType portCfg{pinList,3};
+    Port BSP(&portCfg);
     while(TRUE)
     {
-        portg.TogglePin(PORTG_PIN13);
-        for (uint32_t i = 0; i < 1000000; i++);
+        if(BSP.GetPinState(PUSH_BUTTON)){
+            BSP.SetPinState(GREEN_LED, STD_HIGH);
+            BSP.SetPinState(RED_LED, STD_LOW);
+        }else{
+            BSP.SetPinState(GREEN_LED, STD_LOW);
+            BSP.SetPinState(RED_LED, STD_HIGH);
+        }
     }
     return EXIT_SUCCESS;
 }

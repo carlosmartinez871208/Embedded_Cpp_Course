@@ -52,13 +52,16 @@
 
 /*                                         Imported functions implementation                                         */
 /*********************************************************************************************************************/
-RCC::RCC(void){
-    rcc = (RCC_TypeDef *) RCC_BASE_ADDRESS;
+void RCC::SetPortClockState(const uint8_t Port, const uint8_t State){
+    if(State){
+        this->rcc->ahb1enr |= RCC_GPIO_Clk_Enable[Port];
+    }else{
+        this->rcc->ahb1enr &= ~RCC_GPIO_Clk_Enable[Port];
+    }
 }
 
-void RCC::EnableGPIO(const uint32_t GPIO_EN)
-{
-    rcc->ahb1enr |= GPIO_EN;
+boolean RCC::GetPortClockState(const uint8_t Port){
+    return REG_COMPARER(this->rcc->ahb1enr & RCC_GPIO_Clk_Enable[Port]);
 }
 
 /***************************************************Project Logs*******************************************************
