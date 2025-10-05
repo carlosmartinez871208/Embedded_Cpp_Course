@@ -57,13 +57,11 @@ int main (void)
     Pin_ConfigType pinList[] = {PA5,PC13};
     Port_ConfigType portCfg{pinList,2};
     Port BSP(&portCfg);
+    SysTick TimeBase(&SYSTICK_CONFIG);
     while(TRUE)
     {
-        if(BSP.GetPinState(PUSH_BUTTON)){
-            BSP.SetPinState(GREEN_LED, STD_HIGH);
-        }else{
-            BSP.SetPinState(GREEN_LED, STD_LOW);
-        }
+            BSP.TooglePin(GREEN_LED);
+            TimeBase.Delay(500);
     }
     return EXIT_SUCCESS;
 }

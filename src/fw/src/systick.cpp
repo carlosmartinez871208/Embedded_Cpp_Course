@@ -1,17 +1,17 @@
 /*********************************************************************************************************************/
-/*                                                  HEADER GROUP                                                     */
+/*                                                  SOURCE GROUP                                                     */
 /*********************************************************************************************************************/
 /*                                               OBJECT SPECIFICATION                                                */
 /*********************************************************************************************************************/
 /*!
- * $File: main.h
+ * $File: template.c
  * $Revision: Version 1.0 $
  * $Author: Carlos Martinez $
  * $Date: 2025-08-03 $
  */
 /*********************************************************************************************************************/
 /* DESCRIPTION :                                                                                                     */
-/* main.h:
+/* template.c:
                Use this template for your source code files.
  */
 /*********************************************************************************************************************/
@@ -21,16 +21,12 @@
 /* not permitted without express written authority. Offenders will be liable                                         */
 /* for damages.                                                                                                      */
 /*********************************************************************************************************************/
-#ifndef MAIN_H_
-#define MAIN_H_
+
 /*                                                 Standard libraries                                                */
 /*********************************************************************************************************************/
 
 /*                                                   User libraries                                                  */
 /*********************************************************************************************************************/
-#include "fw.h"
-#include "gpio.h"
-#include "Std_Types.h"
 #include "systick.h"
 
 /*                                                        Types                                                      */
@@ -38,47 +34,102 @@
 
 /*                                                       Macros                                                      */
 /*********************************************************************************************************************/
-inline constexpr Pin_ConfigType PA5 = {
-    PORTA,   // Port
-    PIN5,    // Pin
-    OUTPUT,  // Mode
-    PUSH_PULL, // OutputType
-    LOW_SPEED, // OutputSpeed
-    NO_PULL,   // PullUpDown
-    AF0        // Alternate
-};
 
-inline constexpr Pin_ConfigType PC13 = {
-    PORTC,    // Port
-    PIN13,    // Pin
-    INPUT,    // Mode
-    PUSH_PULL,// OutputType (no afecta en input)
-    LOW_SPEED,// OutputSpeed
-    NO_PULL,  // PullUpDown
-    AF0       // Alternate
-};
-
-inline constexpr SysTick_ConfigType SYSTICK_CONFIG = {
-    SYSTICK_ENABLE,
-    SYSTICK_TICKINT_ENABLE,
-    SYSTICK_PROCESSOR_CLOCK,
-    SYSTICK_1_MS_TICKS
-};
-
-#define GREEN_LED     (uint8_t)0u
-#define PUSH_BUTTON   (uint8_t)1u
-/*                                                 Exported Constants                                                */
+/*                                                      Constants                                                    */
 /*********************************************************************************************************************/
 
-/*                                                 Exported Variables                                                */
-/*********************************************************************************************************************/
-extern uint32_t sys_clk_freq;
-
-/*                                            Exported functions prototypes                                          */
+/*                                                   Local Variables                                                 */
 /*********************************************************************************************************************/
 
+/*                                                 Imported Variables                                                */
 /*********************************************************************************************************************/
-#endif
+
+/*                                             Local functions prototypes                                            */
+/*********************************************************************************************************************/
+
+/*                                           Local functions implementation                                          */
+/*********************************************************************************************************************/
+
+/*                                         Imported functions implementation                                         */
+/*********************************************************************************************************************/
+
+SysTick::SysTick(const SysTick_ConfigType* Config)
+{
+    if (SYSTICK_ENABLE==Config->Enable)
+    {
+        systick = (SysTick_Type *)SYSTICK_BASE_ADDRESS;
+        /* Disable SysTick IRQ and SysTick Timer */
+        __disable_irq();
+        /* Disable SysTick during setup */
+        systick->csr &= ~SYSTICK_RESET_VALUE;
+        /* Clear current value register */
+        systick->cvr = SYSTICK_RESET_VALUE;
+        /* Set reload register */
+        systick->rvr = (Config->ReloadValue & SYSTICK_MAX_RELOAD);
+        /* Set clock source */
+        if (SYSTICK_PROCESSOR_CLOCK==Config->ClkSource)
+        {
+            systick->csr |= SYSTICK_CSR_CLKSOURCE;
+        }
+        else
+        {
+            systick->csr &= ~SYSTICK_CSR_CLKSOURCE;
+        }
+        /* Enable or disable interrupt */
+        if (SYSTICK_TICKINT_ENABLE==Config->TickInt)
+        {
+            systick->csr |= SYSTICK_CSR_TICKINT;
+        }
+        else
+        {
+            systick->csr &= ~SYSTICK_CSR_TICKINT;
+        }
+        /* Enable SysTick */
+        systick->csr |= SYSTICK_CSR_ENABLE;
+        __enable_irq();
+    }
+    else
+    {/* Do nothing */}
+}
+
+SysTick::SysTick(void)
+{
+    systick = (SysTick_Type *)SYSTICK_BASE_ADDRESS;
+}
+
+void SysTick_Handler(void)
+{
+    /* Increment tick count */
+    SysTick tc;
+    tc.SetTick();
+}
+
+uint32_t SysTick::GetTick(void)
+{
+    __disable_irq();
+    current_tick_p = current_tick;
+    __enable_irq();
+    return current_tick_p;
+}
+
+void SysTick::SetTick(void){
+    current_tick+=1ul;
+}
+
+void SysTick::Delay(uint32_t delay)
+{
+    SysTick tc;
+    unsigned int tickstart = tc.GetTick();
+    unsigned int wait = delay;
+    if(wait < SYSTICK_MAX_RELOAD)
+    {
+        wait += 1ul;
+    }
+    else
+    {/* Do nothing */}
+    while ((tc.GetTick() - tickstart) < wait){}
+}
+
 /***************************************************Project Logs*******************************************************
  *|    ID   |     Ticket    |     Date    |                               Description                                 |
  *|---------|---------------|-------------|---------------------------------------------------------------------------|
