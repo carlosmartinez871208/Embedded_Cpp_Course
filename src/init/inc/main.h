@@ -29,7 +29,6 @@
 /*                                                   User libraries                                                  */
 /*********************************************************************************************************************/
 #include "fw.h"
-#include "gpio.h"
 #include "Std_Types.h"
 
 /*                                                        Types                                                      */
@@ -65,6 +64,13 @@ inline constexpr Pin_ConfigType PA0 = {
     LOW_SPEED,// OutputSpeed
     NO_PULL,  // PullUpDown
     AF0       // Alternate
+};
+
+inline constexpr SysTick_ConfigType SYSTICK_CONFIG = {
+    SYSTICK_ENABLE,
+    SYSTICK_TICKINT_ENABLE,
+    SYSTICK_PROCESSOR_CLOCK,
+    SYSTICK_1_MS_TICKS
 };
 
 #define GREEN_LED   (uint8_t)0u

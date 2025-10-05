@@ -96,7 +96,7 @@ WEAK_DEFAULT(UsageFault_Handler);
 WEAK_DEFAULT(SVCall_Handler);
 WEAK_DEFAULT(DebugMonitor_Handler);
 WEAK_DEFAULT(PendSV_Handler);
-WEAK_DEFAULT(Systick_Handler);
+WEAK_DEFAULT(SysTick_Handler);
 
 /* IRQs (orden según RM0090) */
 WEAK_DEFAULT(WWDOG_IRQHandler);
@@ -222,7 +222,7 @@ const uint32_t vector_table[] = {
     (uint32_t) &DebugMonitor_Handler,
     0u,
     (uint32_t) &PendSV_Handler,
-    (uint32_t) &Systick_Handler,
+    (uint32_t) &SysTick_Handler,
     (uint32_t) &WWDOG_IRQHandler,/* Microcontroller interrupts. WWDOG address: 0x0000 0040*/
     (uint32_t) &EXTI_PVD_IRQHandler,
     (uint32_t) &EXTI_TAMP_STAMP_IRQHandler,

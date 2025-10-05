@@ -4,7 +4,7 @@
 /*                                               OBJECT SPECIFICATION                                                */
 /*********************************************************************************************************************/
 /*!
- * $File: main.c
+ * $File: template.c
  * $Revision: Version 1.0 $
  * $Author: Carlos Martinez $
  * $Date: 2025-08-03 $
@@ -27,7 +27,15 @@
 
 /*                                                   User libraries                                                  */
 /*********************************************************************************************************************/
-#include "main.h"
+#include "systick.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+void SysTick_Handler(void);
+#ifdef __cplusplus
+}
+#endif
 
 /*                                                        Types                                                      */
 /*********************************************************************************************************************/
@@ -40,6 +48,8 @@
 
 /*                                                   Local Variables                                                 */
 /*********************************************************************************************************************/
+static volatile uint32_t current_tick   = 0ul;
+static volatile uint32_t current_tick_p = 0ul;
 
 /*                                                 Imported Variables                                                */
 /*********************************************************************************************************************/
@@ -52,23 +62,75 @@
 
 /*                                         Imported functions implementation                                         */
 /*********************************************************************************************************************/
-int main (void)
+
+SysTick::SysTick(const SysTick_ConfigType* Config)
 {
-    Pin_ConfigType pinList[] = {PG13,PG14,PA0};
-    Port_ConfigType portCfg{pinList,3};
-    Port BSP(&portCfg);
-    SysTick systick(&SYSTICK_CONFIG);
-    while(TRUE)
+    if (SYSTICK_ENABLE==Config->Enable)
     {
-        BSP.TooglePin(GREEN_LED);
-        systick.Delay(500);
-        BSP.TooglePin(RED_LED);
+        systick = (SysTick_Type *)SYSTICK_BASE_ADDRESS;
+        /* Disable SysTick IRQ and SysTick Timer */
+        __disable_irq();
+        /* Disable SysTick during setup */
+        systick->csr &= ~SYSTICK_RESET_VALUE;
+        /* Clear current value register */
+        systick->cvr = SYSTICK_RESET_VALUE;
+        /* Set reload register */
+        systick->rvr = (Config->ReloadValue & SYSTICK_MAX_RELOAD);
+        /* Set clock source */
+        if (SYSTICK_PROCESSOR_CLOCK==Config->ClkSource)
+        {
+            systick->csr |= SYSTICK_CSR_CLKSOURCE;
+        }
+        else
+        {
+            systick->csr &= ~SYSTICK_CSR_CLKSOURCE;
+        }
+        /* Enable or disable interrupt */
+        if (SYSTICK_TICKINT_ENABLE==Config->TickInt)
+        {
+            systick->csr |= SYSTICK_CSR_TICKINT;
+        }
+        else
+        {
+            systick->csr &= ~SYSTICK_CSR_TICKINT;
+        }
+        /* Enable SysTick */
+        systick->csr |= SYSTICK_CSR_ENABLE;
+        __enable_irq();
     }
-    return EXIT_SUCCESS;
+    else
+    {/* Do nothing */}
+}
+
+uint32_t SysTick::GetTick(void)
+{
+    __disable_irq();
+    current_tick_p = current_tick;
+    __enable_irq();
+    return current_tick_p;
+}
+
+void SysTick::Delay(uint32_t delay)
+{
+    unsigned int tickstart = GetTick();
+    unsigned int wait = delay;
+    if(wait < SYSTICK_MAX_RELOAD)
+    {
+        wait += 1ul;
+    }
+    else
+    {/* Do nothing */}
+    while ((GetTick() - tickstart) < wait){}
+}
+
+void SysTick_Handler (void)
+{
+    /* Increment tick count */
+    current_tick+=1ul;
 }
 
 /***************************************************Project Logs*******************************************************
  *|    ID   |     Ticket    |     Date    |                               Description                                 |
  *|---------|---------------|-------------|---------------------------------------------------------------------------|
  *|         |               |             |                                                                           |
-**********************************************************************************************************************/ 
+**********************************************************************************************************************/
