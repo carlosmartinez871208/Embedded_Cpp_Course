@@ -97,14 +97,10 @@ typedef struct
 class SysTick{
     private:
         SysTick_Type* systick;
-        uint32_t current_tick   = 0ul;
-        uint32_t current_tick_p = 0ul;
     public:
         SysTick(const SysTick_ConfigType* Config);
-        SysTick(void);
-        uint32_t  GetTick (void);
-        void      SetTick (void);
-        void      Delay   (uint32_t delay);
+        uint32_t GetTick         (void);
+        void     Delay           (uint32_t delay);
 };
 
 /*                                            Exported functions prototypes                                          */

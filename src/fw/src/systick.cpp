@@ -29,6 +29,14 @@
 /*********************************************************************************************************************/
 #include "systick.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+void SysTick_Handler(void);
+#ifdef __cplusplus
+}
+#endif 
+
 /*                                                        Types                                                      */
 /*********************************************************************************************************************/
 
@@ -40,6 +48,8 @@
 
 /*                                                   Local Variables                                                 */
 /*********************************************************************************************************************/
+static volatile uint32_t current_tick   = 0ul;
+static volatile uint32_t current_tick_p = 0ul;
 
 /*                                                 Imported Variables                                                */
 /*********************************************************************************************************************/
@@ -53,10 +63,8 @@
 /*                                         Imported functions implementation                                         */
 /*********************************************************************************************************************/
 
-SysTick::SysTick(const SysTick_ConfigType* Config)
-{
-    if (SYSTICK_ENABLE==Config->Enable)
-    {
+SysTick::SysTick(const SysTick_ConfigType* Config){
+    if (SYSTICK_ENABLE==Config->Enable){
         systick = (SysTick_Type *)SYSTICK_BASE_ADDRESS;
         /* Disable SysTick IRQ and SysTick Timer */
         __disable_irq();
@@ -67,21 +75,15 @@ SysTick::SysTick(const SysTick_ConfigType* Config)
         /* Set reload register */
         systick->rvr = (Config->ReloadValue & SYSTICK_MAX_RELOAD);
         /* Set clock source */
-        if (SYSTICK_PROCESSOR_CLOCK==Config->ClkSource)
-        {
+        if (SYSTICK_PROCESSOR_CLOCK==Config->ClkSource){
             systick->csr |= SYSTICK_CSR_CLKSOURCE;
-        }
-        else
-        {
+        }else{
             systick->csr &= ~SYSTICK_CSR_CLKSOURCE;
         }
         /* Enable or disable interrupt */
-        if (SYSTICK_TICKINT_ENABLE==Config->TickInt)
-        {
+        if (SYSTICK_TICKINT_ENABLE==Config->TickInt){
             systick->csr |= SYSTICK_CSR_TICKINT;
-        }
-        else
-        {
+        }else{
             systick->csr &= ~SYSTICK_CSR_TICKINT;
         }
         /* Enable SysTick */
@@ -92,42 +94,25 @@ SysTick::SysTick(const SysTick_ConfigType* Config)
     {/* Do nothing */}
 }
 
-SysTick::SysTick(void)
-{
-    systick = (SysTick_Type *)SYSTICK_BASE_ADDRESS;
-}
-
-void SysTick_Handler(void)
-{
+void SysTick_Handler(void){
     /* Increment tick count */
-    SysTick tc;
-    tc.SetTick();
+    current_tick+=1ul;
 }
 
-uint32_t SysTick::GetTick(void)
-{
+uint32_t SysTick::GetTick(void){
     __disable_irq();
     current_tick_p = current_tick;
     __enable_irq();
     return current_tick_p;
 }
 
-void SysTick::SetTick(void){
-    current_tick+=1ul;
-}
-
-void SysTick::Delay(uint32_t delay)
-{
-    SysTick tc;
-    unsigned int tickstart = tc.GetTick();
+void SysTick::Delay(uint32_t delay){
+    unsigned int tickstart = GetTick();
     unsigned int wait = delay;
-    if(wait < SYSTICK_MAX_RELOAD)
-    {
+    if(wait < SYSTICK_MAX_RELOAD){
         wait += 1ul;
-    }
-    else
-    {/* Do nothing */}
-    while ((tc.GetTick() - tickstart) < wait){}
+    }else{/* Do nothing */}
+    while ((GetTick() - tickstart) < wait){}
 }
 
 /***************************************************Project Logs*******************************************************
