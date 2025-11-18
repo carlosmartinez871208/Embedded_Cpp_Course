@@ -97,6 +97,7 @@ SysTick::SysTick(const SysTick_ConfigType* Config){
 void SysTick_Handler(void){
     /* Increment tick count */
     current_tick+=1ul;
+    SCB_ICSR |= SCB_ISCR_SET_PENSV_BIT;
 }
 
 uint32_t SysTick::GetTick(void){

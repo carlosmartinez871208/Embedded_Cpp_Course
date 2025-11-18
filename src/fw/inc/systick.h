@@ -31,6 +31,7 @@
 #include "interrupts.h"
 #include "peripherals.h"
 #include "Register.h"
+#include "scb.h"
 #include "Std_Types.h"
 
 /*                                                        Types                                                      */

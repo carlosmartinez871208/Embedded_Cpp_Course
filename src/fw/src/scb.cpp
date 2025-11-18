@@ -4,14 +4,14 @@
 /*                                               OBJECT SPECIFICATION                                                */
 /*********************************************************************************************************************/
 /*!
- * $File: main.c
+ * $File: scb.c
  * $Revision: Version 1.0 $
  * $Author: Carlos Martinez $
  * $Date: 2025-08-03 $
  */
 /*********************************************************************************************************************/
 /* DESCRIPTION :                                                                                                     */
-/* template.c:
+/* sbc.c:
                Use this template for your source code files.
  */
 /*********************************************************************************************************************/
@@ -24,10 +24,10 @@
 
 /*                                                 Standard libraries                                                */
 /*********************************************************************************************************************/
+#include "scb.h"
 
 /*                                                   User libraries                                                  */
 /*********************************************************************************************************************/
-#include "main.h"
 
 /*                                                        Types                                                      */
 /*********************************************************************************************************************/
@@ -52,11 +52,30 @@
 
 /*                                         Imported functions implementation                                         */
 /*********************************************************************************************************************/
-int main (void)
-{
-    OS_Init (5);
-    while(TRUE){}
-    return EXIT_SUCCESS;
+void SCB::SetVectorOffset(const uint32_t Address, const uint32_t Offset){
+    SCB_VTOR = (Address | Offset);
+}
+
+void SCB::TriggerSysTick(void){
+    SCB_ICSR |= SCB_ISCR_SET_PEN_BIT;
+}
+
+void SCB::SetPendSV(void){
+    SCB_ICSR |= SCB_ISCR_SET_PENSV_BIT;
+}
+
+void SCB::ClearPendSV(void){
+    SCB_ICSR &= ~SCB_ISCR_SET_PENSV_BIT;
+}
+
+void SCB::SetSysTickPriority(void){
+    SCB_SPHR3 &= SCB_SHPR_SYSTICK_RST;    /* Clear SysTick priority bits */
+    SCB_SPHR3 |= SCB_SHPR_SYSTICK_PRI_14; /* Set SysTick priority bits */
+}
+
+void SCB::SetPendSVPriority(void){
+    SCB_SPHR3 &= SCB_SHPR_PENDSV_RST;     /* Clear PendSV priority bits */
+    SCB_SPHR3 |= SCB_SHPR_PENDSV_PRI_15;  /* Set PendSV priority bits */
 }
 
 /***************************************************Project Logs*******************************************************
