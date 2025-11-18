@@ -31,6 +31,7 @@
 #include "interrupts.h"
 #include "peripherals.h"
 #include "Register.h"
+#include "scb.h"
 #include "Std_Types.h"
 
 /*                                                        Types                                                      */
@@ -65,7 +66,7 @@ typedef struct
 #define SYSTICK_1_MS_TICKS      15999ul    /* Assuming a system clock of 16 MHz, 1 ms = 1600 ticks */
 #define SYSTICK_650_US_TICKS    10399ul    /* Assuming a system clock of 16 MHz, 650 us = 10400 ticks */
 #define SYSTICK_500_US_TICKS    7999ul     /* Assuming a system clock of 16 MHz, 500 us = 8000 ticks */
-#define SYSTICK_100_US_TICKS    1599ul  /* Assuming a system clock of 16 MHz, 100 us = 1600 ticks */
+#define SYSTICK_100_US_TICKS    1599ul     /* Assuming a system clock of 16 MHz, 100 us = 1600 ticks */
 
 #define SYSTICK_EXTERNAL_CLOCK  (uint8_t)0
 #define SYSTICK_PROCESSOR_CLOCK (uint8_t)1
@@ -86,6 +87,9 @@ typedef struct
 #define SYSTICK_RESET_VALUE     (uint32_t)0ul
 #define SYSTICK_MAX_RELOAD      (uint32_t)0xFFFFFFul
 
+/* Clear Systick value register */
+#define SYST_CVR_CURRENT_CLR  (0x000000ul)
+
 /*                                                 Exported Constants                                                */
 /*********************************************************************************************************************/
 
@@ -105,7 +109,6 @@ class SysTick{
 
 /*                                            Exported functions prototypes                                          */
 /*********************************************************************************************************************/
-
 
 /*********************************************************************************************************************/
 #endif

@@ -4,14 +4,14 @@
 /*                                               OBJECT SPECIFICATION                                                */
 /*********************************************************************************************************************/
 /*!
- * $File: main.h
+ * $File: template.h
  * $Revision: Version 1.0 $
  * $Author: Carlos Martinez $
  * $Date: 2025-08-03 $
  */
 /*********************************************************************************************************************/
 /* DESCRIPTION :                                                                                                     */
-/* main.h:
+/* template.h:
                Use this template for your source code files.
  */
 /*********************************************************************************************************************/
@@ -21,64 +21,89 @@
 /* not permitted without express written authority. Offenders will be liable                                         */
 /* for damages.                                                                                                      */
 /*********************************************************************************************************************/
-#ifndef MAIN_H_
-#define MAIN_H_
+#ifndef OS_H_
+#define OS_H_
 /*                                                 Standard libraries                                                */
 /*********************************************************************************************************************/
 
 /*                                                   User libraries                                                  */
 /*********************************************************************************************************************/
-#include "fw.h"
+#include "interrupts.h"
+#include "peripherals.h"
+#include "Register.h"
+#include "scb.h"
 #include "Std_Types.h"
+#include "systick.h"
 
 /*                                                        Types                                                      */
 /*********************************************************************************************************************/
+typedef struct
+{
+    uint32_t*         Stack_Pointer; /* Apunta hasta el inicio del stack (hay que recordar que se incrementa hacia abajo):
+                                     Esto tiene como objetivo guardar el contexto de cada tarea. */
+    uint8_t           Priority;      /* Nos brinda la prioridad de la tarea. */
+    uint8_t           Status;        /* Nos da informacion del estatus de la tarea. */
+    uint32_t          Offset;        /* Este es el offset de ejecución. */
+}ThreadControlBlock_Type; /* Esta estructura nos ayuda a manipular cada uno de nuestros hilos de ejecución. */
+
+typedef ThreadControlBlock_Type TCB_Type; /* Definimos un alias para la estructura ThreadControlBlock_Type. */
 
 /*                                                       Macros                                                      */
 /*********************************************************************************************************************/
-inline constexpr Pin_ConfigType PG13 = {
-    PORTG,   // Port
-    PIN13,    // Pin
-    OUTPUT,  // Mode
-    PUSH_PULL, // OutputType
-    LOW_SPEED, // OutputSpeed
-    NO_PULL,   // PullUpDown
-    AF0        // Alternate
-};
+/* Un sistema operativo debe tener la capacidad de proveer cierto tiempo de procesamiento a cada tarea especifica 
+   en el caso de los sistemas operativos de tiempo real lo que los caracteriza es el concepto de "deadline", esto
+   significa que cada hilo de ejecucion (thread) debe cumplir ese deadline, cabe mencionar que una tarea (task)
+   es la ejecución de un hilo. */
 
-inline constexpr Pin_ConfigType PG14 = {
-    PORTG,   // Port
-    PIN14,    // Pin
-    OUTPUT,  // Mode
-    PUSH_PULL, // OutputType
-    LOW_SPEED, // OutputSpeed
-    NO_PULL,   // PullUpDown
-    AF0        // Alternate
-};
+#define MAX_NUMBER_OF_TASKS (5ul) /* Al estar usando sistemas embebidos es recomendable no usar memoria dinamica
+                                      debido a los recursos de los microcontroladores que son limitados:
+                                      Memoria limitada, capacidad de procesamiento limitado. */
 
-inline constexpr Pin_ConfigType PA0 = {
-    PORTA,    // Port
-    PIN0,    // Pin
-    INPUT,    // Mode
-    PUSH_PULL,// OutputType (no afecta en input)
-    LOW_SPEED,// OutputSpeed
-    NO_PULL,  // PullUpDown
-    AF0       // Alternate
-};
+#define STACK_SIZE          (100) /* Reserves 400 bytes for task configuration and task context. */
 
-#define GREEN_LED   (uint8_t)0u
-#define RED_LED     (uint8_t)1u
-#define PUSH_BUTTON (uint8_t)2u
+#define THUMB_MODE          (1ul<<24) /* PSR: Habilitar THUMB mode (2 bytes words). */
+
+#define FIFO_SIZE           (50ul)
 
 /*                                                 Exported Constants                                                */
 /*********************************************************************************************************************/
 
 /*                                                 Exported Variables                                                */
 /*********************************************************************************************************************/
-extern uint32_t sys_clk_freq;
 
 /*                                            Exported functions prototypes                                          */
 /*********************************************************************************************************************/
+/* Prototypes for the OS functions: */
+extern void OS_Init                (uint8_t Threads); /* Receive as argument the number of threads. */
+
+/* Use for cooperative multitasking */
+extern void OS_Yield               (void);
+
+/* Semaphores: */
+extern void OS_SemaphoreInit (sint32_t* semaphore,sint32_t value);
+extern void OS_SemaphoreSet  (sint32_t* semaphore);
+extern void OS_SemaphoreWait (sint32_t* semaphore);
+
+/* Inter-Threads Data Transfer: */
+extern void     OS_FIFOInit (void);
+extern boolean  OS_FIFOPut  (uint32_t data);
+extern uint32_t OS_FIFOGet  (void);
+
+
+/* Exported Threads: */
+extern void OS_Thread_0            (void);
+extern void OS_Thread_1            (void);
+extern void OS_Thread_2            (void);
+extern void OS_Thread_3            (void);
+extern void OS_Thread_4            (void);
+
+/* Exported Periodic tasks: */
+extern void OS_Periodic_25mS       (void);
+extern void OS_Periodic_100mS      (void);
+extern void OS_Periodic_250mS      (void);
+extern void OS_Periodic_500mS      (void);
+extern void OS_Periodic_1S         (void);
+
 
 /*********************************************************************************************************************/
 #endif

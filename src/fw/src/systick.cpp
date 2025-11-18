@@ -76,6 +76,12 @@ SysTick::SysTick(const SysTick_ConfigType* Config)
         systick->cvr = SYSTICK_RESET_VALUE;
         /* Set reload register */
         systick->rvr = (Config->ReloadValue & SYSTICK_MAX_RELOAD);
+        /* Set SysTick priority: */
+        SCB_SPHR3 &= SCB_SHPR_SYSTICK_RST;    /* Clear SysTick priority bits */
+        SCB_SPHR3 |= SCB_SHPR_SYSTICK_PRI_14; /* Set SysTick priority bits */
+        /* Set PendSV priority: */
+        SCB_SPHR3 &= SCB_SHPR_PENDSV_RST;     /* Clear PendSV priority bits */
+        SCB_SPHR3 |= SCB_SHPR_PENDSV_PRI_15;  /* Set PendSV priority bits */
         /* Set clock source */
         if (SYSTICK_PROCESSOR_CLOCK==Config->ClkSource)
         {
@@ -127,6 +133,7 @@ void SysTick_Handler (void)
 {
     /* Increment tick count */
     current_tick+=1ul;
+    SCB_ICSR |= SCB_ISCR_SET_PENSV_BIT;
 }
 
 /***************************************************Project Logs*******************************************************

@@ -9,6 +9,8 @@ INCLUDES =\
 -Iinc\
 -I../../../inc/generic/\
 -I../../../inc/autosar/\
+-I../../fw/inc/\
+-I../../fw/inc/stm32f429zi\
 
 # Microcontroller Processor Architecture:
 MACH = cortex-m4

@@ -2,7 +2,7 @@
     "cortex-debug.gdbPath": "arm-none-eabi-gdb",
     "cortex-debug.JLinkGDBServerPath": "JLinkGDBServer",
     "files.associations": {
-        
+        "scb.h": "c"
     },  
     "cortex-debug.variableUseNaturalFormat": false,
 }
